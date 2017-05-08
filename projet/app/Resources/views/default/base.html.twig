@@ -9,22 +9,10 @@
 </head>
 <body>
 {% block menu %}
-    {{ include ('default/menu.html.twig') }}
+    {{ include ('_menu.html.twig') }}
 {% endblock menu %}
-<div class="col-lg-6">
-    {% for message in app.session.flashbag.get('success') %}
-        <div style="background-color: #21BA45;color:#FFFFFF">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.session.flashbag.get('error') %}
-        <div style="background-color: #DB2828;color:#FFFFFF">
-            {{ messgae }}
-        </div>
-    {% endfor %}
-    {% block body %}{% endblock %}
-</div>
 
+{% block body %}{% endblock %}
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 {% block javascripts %}{% endblock %}

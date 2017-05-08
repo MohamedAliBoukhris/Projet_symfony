@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Details Blog {% endblock %}
+
+{% block body %}
+    <h1>Blog</h1>
+    <h4>
+        Titre :
+    </h4>
+    <div class="container-fluid">
+      {{ blog.title }}
+    </div>
+    <h4>
+        Contenu :
+    </h4>
+    <div class="container-fluid">
+        {{ blog.content }}
+    </div>
+    <h4>
+        Publié à :
+    </h4>
+    <div class="container-fluid">
+        {{ blog.publishedAt|date('Y-m-d H:s:i' ) }}
+    </div>
+
+    {% if not blog.published %}
+    <h4>
+         Actions :
+    </h4>
+    <div class="container-fluid">
+        <a href="{{ path('mark',{'id': blog.id})}}" class="btn btn-success"> Mask as </a>
+    </div>
+    {% endif %}
+
+
+{% endblock body %}

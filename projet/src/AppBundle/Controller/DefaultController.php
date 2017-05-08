@@ -9,13 +9,23 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="home")
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $em=$this->get('doctrine.orm.entity_manager');
+        $repository=$em->getRepository(Blog::class);
+        $blogs=$repository->findAll();
+        return $this->render('default/list.html.twig',['blogs'=>$blogs]);
+    }
+    /**
+     * @Route("/login", name="login")
+     */
+    public function loginAction(Request $request)
+    {
+        $em=$this->get('doctrine.orm.entity_manager');
+        $repository=$em->getRepository(Blog::class);
+        $blogs=$repository->findAll();
+        return $this->render('default/list.html.twig',['blogs'=>$blogs]);
     }
 }
