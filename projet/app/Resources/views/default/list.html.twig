@@ -34,12 +34,12 @@
                         ({{ blog.title }})
                     </td>
                     <td>
-                        ({{ blog.content }})
+                        ({{ blog.content}})
                     </td>
                     <td>
                         ({{ blog.publishedAt|date('Y-m-d H:i:s') }})
                     </td>
-                    <td><a href="{{ path('detail',{'id': blog.id})}}" class="btn btn-primary"/> View Contact
+                    <td><a href="{{ path('detail',{'id': blog.id})}}" class="btn btn-primary"/> View Blog
 
                     </td>
 
@@ -48,6 +48,7 @@
 
 
         {% endfor %}
+
         </tbody>
     </table>
 

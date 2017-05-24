@@ -14,6 +14,46 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Blog
 {
     /**
+     * @var Commentaire
+     * @ORM\OneToMany(targetEntity="Commentaire", fetch="LAZY", mappedBy="blog")
+     * @ORM\JoinColumn(name="commentaire_id",  referencedColumnName="id")
+     */
+    protected $commentaires;
+
+    public function __construct()
+    {
+        $this->commentaires = new ArrayCollection();
+    }
+    /**
+     * @return Commentaire
+     */
+    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires[] = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     */
+    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
+    }
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -156,5 +196,13 @@ class Blog
     {
         return $this->published;
     }
-}
 
+    /**
+     * Add commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     *
+     * @return Blog
+     */
+
+}

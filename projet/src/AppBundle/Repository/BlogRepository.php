@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class BlogRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllForList()
+        {
+            return $this->getEntityManager()
+                ->createQuery(
+                    'select id,published,published_at,title,LEFT(content,100) as content from AppBundle: blog'
+                )
+                ->getResult();
+        }
+        //je peux le faire à partir d'une nouvelle requete mais c'est tellement plus facile de le faire dans la vue
+
 }

@@ -8,9 +8,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Commentaire;
 use AppBundle\Form\Type\ContactType;
 use AppBundle\Entity\Blog;
 use AppBundle\Form\Type\BlogType;
+use AppBundle\Form\Type\CommentaireType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +22,7 @@ class BlogController extends Controller
 {
 
  /**
- * @Route("/list", name="list")
+ * @Route("/admin/list", name="list")
  */
     public function listAction(Request $request)
     {
@@ -29,16 +31,53 @@ class BlogController extends Controller
         $blogs=$repository->findAll();
         return $this->render('default/list.html.twig',['blogs'=>$blogs]);
     }
+
     /**
-     * @Route("/list/details/{id}", name="detail")
+//     * @Route("/admin/list/remove/{id}", name="remove")
      */
-    public function listDetailsAction(Blog $blog)
+    public function listDetails(Request $request,$id)
     {
-        return $this->render('default/detail.html.twig',['blog'=>$blog]);
+        $em=$this->get('doctrine.orm.entity_manager');
+        $repository=$em->getRepository(Blog::class);
+        $blogs=$repository->findAll();
+        $repository=$em->getRepository(Commentaire::class);
+        $commentaire=$repository->find($id);
+        $em->remove($commentaire);
+        $em->flush();
+
+        return $this->render('default/list.html.twig',['blogs'=>$blogs]);
+    }
+    /**
+     * @Route("/admin/list/details/{id}", name="detail")
+     */
+    public function listDetailsAction(Request $request,$id)
+    {
+        $em=$this->get('doctrine.orm.entity_manager');
+        $repository=$em->getRepository(Blog::class);
+        $blog=$repository->find($id);
+        $em=$this->get('doctrine.orm.entity_manager');
+        $repository=$em->getRepository(Commentaire::class);
+        $commentaires=$repository->findBy(array('blog' => $blog));
+        $commentaire=new Commentaire();
+        $form = $this->createForm(CommentaireType::class,$commentaire);
+        $form->handleRequest($request);
+        if($form->isSubmitted()&& $form->isValid()){
+            $commentaire->setBlog($blog);
+            $em=$this->get('doctrine.orm.entity_manager');
+            $em->persist($commentaire);
+            $em->flush();
+            $message=sprintf('Commentaire ajouté avec succes');
+            $this->addFlash('success',$message); // message de remerciement
+            return $this->redirectToRoute('detail',['id'=>$id]); // redirection vers une autre page
+        }
+
+
+        return $this->render('default/detail.html.twig',array('blog'=>$blog,'commentaires'=>$commentaires,'form'=>$form->createView()));
+
     }
 
     /**
-     * @Route("/blog/details/{id}/mark", name="mark")
+     * @Route("/admin/blog/details/{id}/mark", name="mark")
      */
     public function markAction(Blog $blog)
     {
@@ -55,7 +94,7 @@ class BlogController extends Controller
     }
 
     /**
-     * @Route("/ajout", name="ajout")
+     * @Route("/admin/ajout", name="ajout")
      */
     public function ajoutAction(Request $request)
     {
@@ -72,10 +111,12 @@ class BlogController extends Controller
 
             $messgae=sprintf('Contact ajouté avec succes');
             $this->addFlash('success',$messgae); // message de remerciement
-            return $this->redirectToRoute('home'); // redirection vers une autre page
+            return $this->redirectToRoute('list'); // redirection vers une autre page
 
         }
 
         return $this->render('default/ajout.html.twig',['form'=>$form->createView()]);
     }
+
+
 }
