@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Commentaire;
-use AppBundle\Form\Type\ContactType;
+use AppBundle\Repository\CommentaireRepository;
 use AppBundle\Entity\Blog;
 use AppBundle\Form\Type\BlogType;
 use AppBundle\Form\Type\CommentaireType;

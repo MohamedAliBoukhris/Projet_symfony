@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class CommentaireRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function count()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(p) AS somme FROM AppBundle: commentaire p '
+            )
+            ->getResult();
+    }
+
 }

@@ -20,10 +20,7 @@ class Blog
      */
     protected $commentaires;
 
-    public function __construct()
-    {
-        $this->commentaires = new ArrayCollection();
-    }
+
     /**
      * @return Commentaire
      */
